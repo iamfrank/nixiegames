@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Nixie Games</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <style>
+        
+            body {
+                background-color: #000;
+                color: #fff;
+                font: 1em/1.2 sans-serif;
+            }
+            h1 {
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                align-items: center;
+            }
+            #logo {
+                width: 30rem;
+                height: auto;
+            }
+            #logo-txt {
+                font-weight: 200;
+                text-transform: uppercase;
+                letter-spacing: .2rem;
+                font-size: 1.75rem;
+                color: #555;
+                position: relative; bottom: 4rem; left: .5rem;
+            }
+
+        </style>
+    </head>
+    <body>
+        
+        <main>
+
+            <h1>
+                <object id="logo" type="image/svg+xml" data="./img/nixiegames_logo2.svg"></object>
+                <span id="logo-txt">Nixie Games</span>
+            </h1>
+
+        </main>
+
+        <script>
+
+            var svgObject,
+                tube,
+                n,
+                g
+
+            function flickerLight(svg_element, hsl_color_obj, on) {
+                var rand_timeout = Math.floor(Math.random()*3000)
+                setTimeout(function() {
+                    if (on) { // Turn the light on
+                        svg_element.style.filter = 'url(#outerGlow)'
+                        svg_element.style.stroke = 'hsl(' + hsl_color_obj.h + ',' + hsl_color_obj.s + '%,' + hsl_color_obj.l + '%)'
+                    } else { // Turn the light off
+                        svg_element.style.filter = 'none'
+                        svg_element.style.stroke = '#555'
+                    }
+                    flickerLight(svg_element, hsl_color_obj, !on)
+                }, rand_timeout)
+            }
+
+            function flickerTubeOn() {
+                var rand_timeout = Math.floor(Math.random()*3000)
+                setTimeout(function() {
+                    document.getElementById('logo-txt').style.color = 'hsl(50,100%,95%)'
+                    tube.style.filter = 'url(#outerGlow)'
+                    tube.style.stroke = 'hsl(50,100%,90%)'
+                    flickerLight(g, {h: 15, s: 100, l: 80}, true)
+                    flickerLight(n, {h: 15, s: 100, l: 80}, true)
+                }, rand_timeout)
+            }
+
+            window.addEventListener("load", function() {
+                svgObject = document.getElementById('logo').contentDocument
+                tube = svgObject.getElementById('layer4').getElementsByTagName('path')[0]
+                g = svgObject.getElementById('layer3').getElementsByTagName('path')[0]
+                n = svgObject.getElementById('layer2').getElementsByTagName('path')[0]
+
+                tube.style.stroke = '#555'
+                g.style.stroke = '#555'
+                n.style.stroke = '#555'
+
+                flickerTubeOn()
+            })
+
+        </script>
+        
+    </body>
+</html>
